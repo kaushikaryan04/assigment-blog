@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}{{ user_profile.username }}'s Profile - Blog Platform{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ user_profile.username }}'s Profile</h1>
+    <p><strong>Email:</strong> {{ user_profile.email }}</p>
+    <p><strong>Date Joined:</strong> {{ user_profile.date_joined|date:"F j, Y" }}</p>
+
+    <h2 class="mt-4">Posts by {{ user_profile.username }}</h2>
+    <div class="list-group mb-4">
+        {% for post in posts %}
+        <a href="{% url 'post_detail' post.slug %}" class="list-group-item list-group-item-action">
+            <h5 class="mb-1">{{ post.title }}</h5>
+            <p class="mb-1">{{ post.content|truncatewords:30 }}</p>
+            <small class="text-muted">Published on {{ post.published_date|date:"F j, Y, g:i a" }}</small>
+        </a>
+        {% empty %}
+        <p class="list-group-item">No posts available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

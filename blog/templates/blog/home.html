@@ -1,0 +1,53 @@
+{% extends 'blog/base.html' %} 
+{% block title %}Home - Blog Platform{% endblock %} 
+{% block content %}
+<h1 class="my-4">Recent Posts</h1>
+<div class="list-group mb-4">
+    {% for post in posts %}
+    <a href="{% url 'post_detail' post.slug %}" class="list-group-item list-group-item-action">
+        <h5 class="mb-1">{{ post.title }}</h5>
+        <p class="mb-1">{{ post.content|truncatewords:30 }}</p>
+        <small class="text-muted">By {{ post.author.username }} on {{ post.published_date}}</small>
+    </a>
+    {% empty %}
+    <p class="list-group-item">No posts available.</p>
+    {% endfor %}
+</div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if is_paginated %}
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1" aria-label="First">
+                <span aria-hidden="true">&laquo; First</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&lsaquo; Previous</span>
+            </a>
+        </li>
+        {% endif %}
+
+        <li class="page-item disabled">
+            <a class="page-link" href="#">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </a>
+        </li>
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">Next &rsaquo;</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                <span aria-hidden="true">Last &raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %}

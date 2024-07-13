@@ -1,0 +1,46 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}{{ post.title }} - Blog Platform{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <small>
+        By 
+        {% if post.author.username %}
+            <a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a>
+        {% else %}
+            Anonymous
+        {% endif %}
+        on {{ post.published_date|date:"F j, Y, g:i a" }}
+    </small>
+    <hr>
+    <h3>Comments</h3>
+    {% for comment in comments %}
+        <div class="comment mb-3">
+            <p>{{ comment.content }}</p>
+            <small>
+                By 
+                {% if comment.author.username %}
+                    <a href="{% url 'profile' comment.author.username %}">{{ comment.author.username }}</a>
+                {% else %}
+                    Anonymous
+                {% endif %}
+                on {{ comment.created_date|date:"F j, Y, g:i a" }}
+            </small>
+        </div>
+    {% endfor %}
+    <hr>
+    {% if user.is_authenticated %}
+    <h3>Leave a Comment</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% else %}
+    <p>You must be <a href="{% url 'login' %}">logged in</a> to leave a comment.</p>
+    {% endif %}
+</div>
+{% endblock %}

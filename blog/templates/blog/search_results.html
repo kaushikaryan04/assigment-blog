@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Search Results - Blog Platform{% endblock %}
+
+{% block content %}
+<h1>Search Results</h1>
+{% if query %}
+    <p>Search results for "{{ query }}":</p>
+    <div class="list-group">
+        {% for post in results %}
+        <a href="{% url 'post_detail' post.slug %}" class="list-group-item list-group-item-action">
+            <h5 class="mb-1">{{ post.title }}</h5>
+            <p class="mb-1">{{ post.content|truncatewords:30 }}</p>
+            <small class="text-muted">By {{ post.author.username }} on {{ post.published_date|date:"F j, Y, g:i a" }}</small>
+        </a>
+        {% endfor %}
+        {% if not results %}
+        <p>No posts found.</p>
+        {% endif %}
+    </div>
+{% else %}
+    <p>Please enter a search term.</p>
+{% endif %}
+{% endblock %}
